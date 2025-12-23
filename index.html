@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="TWIN">
+    <meta name="keywords" content="TWIN, Fine-grained VQA, Reinforcement Learning">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Same or Not? Enhancing Visual Perception in Vision-Language Models</title>
+
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/images/valor_logo_full.png">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+
+<body>
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <div class="valor-title">
+                            <img src="./static/images/twin_logo.png" alt="TWIN logo" class="valor-logo">
+                            <h1 class="title is-1 publication-title">TWIN</h1>
+                        </div>
+                        <h1 class="title is-1 publication-title">Same or Not? Enhancing Visual Perception in
+                            Vision-Language Models</h1>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                                <a href="https://damianomarsili.github.io/" target="_blank"
+                                    rel="noopener noreferrer">Damiano Marsili</a>,</span>
+                            <span class="author-block">
+                                <a href="https://aditya-mehta1.github.io/" target="_blank"
+                                    rel="noopener noreferrer">Aditya Mehta</a>,</span>
+                            <span class="author-block">
+                                <a href="https://rlin232.github.io/" target="_blank" rel="noopener noreferrer">Ryan
+                                    Lin</a>,</span>
+                            <span class="author-block">
+                                <a href="https://georgiagkioxari.com/" target="_blank" rel="noopener noreferrer">Georgia
+                                    Gkioxari</a></span>
+                        </div>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">Caltech</span>
+                        </div>
+                        <!-- DAMI up to here. -->
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <!-- PDF Link. -->
+                                <span class="link-block">
+                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </span>
+                                        <span>Paper</span>
+                                    </a>
+                                </span>
+                                <!-- Arxiv Link. -->
+                                <span class="link-block">
+                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                                <!-- TWIN Link. -->
+                                <span class="link-block">
+                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                                                alt="Hugging Face logo" style="height: 1em;">
+                                        </span>
+                                        <span>Dataset</span>
+                                    </a>
+                                </span>
+                                <!-- FGVQA Link. -->
+                                <span class="link-block">
+                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                                                alt="Hugging Face logo" style="height: 1em;">
+                                        </span>
+                                        <span>Benchmark</span>
+                                    </a>
+                                </span>
+                                <!-- Checkpoints Link. -->
+                                <span class="link-block">
+                                    <a href="https://huggingface.co/collections/glab-caltech/twin" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                                                alt="Hugging Face logo" style="height: 1em;">
+                                        </span>
+                                        <span>Checkpoints</span>
+                                    </a>
+                                </span>
+                                <!-- Code Link. -->
+                                <span class="link-block">
+                                    <a href="https://github.com/damianomarsili/VALOR"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="content has-text-centered">
+                    <p>
+                        <b>tl;dr:</b> We introduce TWIN, ..
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--/ Abstract. -->
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column ">
+                    <div class="content has-text-justified">
+                        <h3>Same or Not?</h3>
+                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
+                            <img src="./static/images/4o_vs_gpt5_combined.png" alt="Example from TWIN">
+                            <!-- optional caption -->
+                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
+                                Figure 1: TODO.
+                            </figcaption>
+                        </figure>
+
+                        <p>
+                            Consider these two images (...)
+                        </p>
+
+                        <h3>Why do Open-Source VLMs Struggle?</h3>
+
+                        <p>
+                            We first ask (...)
+                        </p>
+                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
+                            <img src="./static/images/valor.png" alt="Perception LM Datamix"
+                                style="max-width: 800px; width: 100%; height: auto;">
+                            <!-- optional caption -->
+                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
+                                Figure 3: PLM datamix, outline some of the datasets & show some vqa queries on side.
+                            </figcaption>
+                        </figure>
+
+                        <p>Where are the datasets that test fine-grained visual understanding?</p>
+
+                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
+                            <img src="./static/images/valor.png" alt="PerceptionLM omits fine-grained understanding."
+                                style="max-width: 800px; width: 100%; height: auto;">
+                            <!-- optional caption -->
+                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
+                                Figure 3: PLM datamix but highlight Birds-to-words & SpotTheDiff with examples on the
+                                side.
+                            </figcaption>
+                        </figure>
+
+                        <p> (...) <strong>We need more large-scale training datasets that emphasize fine-grained image
+                                understadning in VLMs!</strong></p>
+
+                        <h3>The TWIN Dataset</h3>
+
+                        <p>
+                            We present TWIN, a large-scale VQA dataset for advancing fine-grained visual understanding
+                            in VLMs. TWIN introduces $561{,}000$ instance-centric queries
+                            where models are tasked to judge whether two similar looking images depict the same object
+                            instance. This design rewards attention to nuanced, instance-level details such as shape,
+                            texture, and part geometry, going beyond category-level understanding.
+                        </p>
+
+                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
+                            <img src="./static/images/twin_dataset.png" alt="TWIN dataset overview"
+                                style="max-width: 800px; width: 100%; height: auto;">
+                            <!-- optional caption -->
+                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
+                                Figure TODO: TWIN is a large-scale VQA dataset for fine-grained visual understanding,
+                                where VLMs determine whether two images depict the same instance. TWIN contains $561$K
+                                pairwise VQA queries across $1{,}836$ object instances, spanning $36$ categories of
+                                common objects and over $22$K images.
+                            </figcaption>
+                        </figure>
+
+                        <p></p><strong>Sourcing Instances.</strong> We define an instance as a set of images of the same
+                        physical object under varied viewpoints, lighting, and backgrounds. We source object instances
+                        across diverse categories from Amazon Reviews <a href="#amazon_reviews">[1]</a>. From this
+                        definition, we design a VQA task where a VLM receives two images and determines if they depict
+                        the same instance.</p>
+
+                        <p></p><strong>Hard Negative Pairs.</strong> A balanced dataset for fine-grained understanding
+                        requires both positive and negative pairs. If all examples were positive, the task would be
+                        trivial. Likewise, random negatives are often too easy (e.g., a mug paired with a fan). We
+                        therefore focus on hard negatives – distinct objects that appear similar. We collect these hard
+                        negatives with the help of human annotators.</p>
+
+
+                        <p></p><strong>Statistics and Scalability.</strong> TWIN features $561$K pairwise VQA queries,
+                        including
+                        $22{,}157$ unique images of $1{,}836$ object instances. Our instances span a wide range of
+                        categories of household objects. Importantly, our pairwise formulation enables TWIN to scale
+                        favorably with the number of object instances.
+                        </p>
+                        
+                        <h3>Post-Training VLMs with TWIN</h3>
+                        <p>
+                            To improve fine-grained understanding in VLMs and evaluate the impact of our new dataset,
+                            we post-train existing models on TWIN. Our task requires recognizing subtle attributes to
+                            distinguish similar instances, and we hypothesize that optimizing for this task enhances
+                            broader fine-grained abilities. We post-train with reinforcement learning as it is shown to
+                            improve model capabilities while preserving prior skills.
+                        </p>
+                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
+                            <img src="./static/images/training.png" alt="Post-Training VLMs on TWIN"
+                                style="max-width: 800px; width: 100%; height: auto;">
+                            <!-- optional caption -->
+                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
+                                Figure TODO: We post-train VLMs using reinforncement learning on TWIN.
+                                Reward is computed by comparing the predicted answer with the ground truth pair
+                                assignment.
+                            </figcaption>
+                        </figure>
+                        <p>Given image pairs $(I_1, I_2)$ with ground truth label $y ∈ \{
+                            \text{yes}, \text{no} \}$, a VLM $\pi_\theta$, parametrized by $θ$, is prompted to produce a
+                            textual explanation and a final answer $\hat{y}$ whether both images depict the same
+                            instance. We use a binary outcome reward comparing prediction and ground truth:
+                            $R(y, \hat{y}) = \mathbf{1}\{y = \hat{y} \}$. Importantly, supervision relies
+                            only on pairwise assignments, without any descriptive textual annotations. We tune our VLM
+                            $\pi_\theta$ on this task using GRPO.</p>
+
+                        <h3>The FGVQA Benchmark Suite</h3>
+                        <p>
+                            (...)
+                        </p>
+                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
+                            <img src="./static/images/fgvqa.png" alt="FGVQA Benchmark Suite"
+                                style="max-width: 1000px; width: 100%; height: auto;">
+                            <!-- optional caption -->
+                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
+                                Figure TODO: FGVQA is a suite of fine-grained VQA benchmarks spanning retail products;
+                                animals and plants; landmarks; birds;
+                                and art. We include two query types: <em>pair</em> (top row), where a VLM judges if
+                                two images depict the same instance, species, or landmark, and <em>multi</em> where it
+                                counts how
+                                many images match a reference.
+                            </figcaption>
+                        </figure>
+
+                        <p>
+                            Fine-grained understanding is a general skill: models attuned to subtle differences should
+                            generalize across domains. To evaluate this, we repurpose recognition and retrieval
+                            datasets, totaling $12{,}000$ queries spanning diverse domains:
+                        </p>
+
+                        <ul>
+                            <li>
+                                <strong>TWIN-Eval</strong> is the the evaluation set of TWIN. It is collected
+                                identically to TWIN, but features distinct instances and images.
+                            </li>
+                            <li>
+                                <strong>ILIAS <a href="#ilias">[2]</a></strong> is a large-scale test dataset of
+                                instance-level image retrieval. It predominantly features images of retail products
+                                taken in various contexts, backgrounds, and lighting.
+                            </li>
+                            <li>
+                                <strong>Google Landmarks v2 <a href="#landmarks">[3]</a></strong> is a landmark
+                                recognition dataset featuring human-made and natural landmarks. The dataset has been
+                                used in both classification and retrieval settings.
+                            </li>
+                            <li>
+                                <strong>MET <a href="#met">[4]</a></strong> is an image retrieval dataset featuring
+                                artwork from the Metropolitan Museum of Art in New York. The dataset features images of
+                                the same art piece or sculpture from varying viewpoints, emphasizing multi-view
+                                consistency in retrieval.
+                            </li>
+                            <li>
+                                <strong>CUB <a href="#cub">[5]</a></strong> is a fine-grained classification dataset
+                                that focuses on identifying bird species from images
+                            </li>
+                            <li>
+                                <strong>Inquire <a href="#inquire">[6]</a></strong> is a benchmark for natural world
+                                image retrieval, featuring images of animal and plant species sourced from the
+                                iNaturalist <a href="#inat">[7]</a> dataset.
+
+                            </li>
+                        </ul>
+
+                        <p>The breadth of FGVQA enables assessment of cross-domain generalization. For each benchmark,
+                            we construct two query types:</p>
+
+                        <ul>
+                            <li>
+                                <em>Pair</em> queries show two images and ask whether they depict the same instance,
+                                artwork, or species.
+                            </li>
+                            <li>
+                                <em>Multi</em> queries provide a reference image and three candidates, and ask how many
+                                match the reference.
+                            </li>
+                        </ul>
+
+                        <p>Each dataset includes $1000$ balanced examples per type: pair queries split evenly among
+                            positive and negative cases, while multi queries distribute uniformly across answer counts
+                            ($250$ each from $0$-$3$).</p>
+
+                        <h3>Training on TWIN improves fine-grained understanding.</h3>
+                        <p> TODO: carousel of examples.</p>
+
+                        <div class="wrap-block">
+                            <figure class="twin-fig">
+                                <img src="./static/images/radar_plot.png" alt="..." />
+                            </figure>
+
+                            <p><strong>Quantitative Results.</strong> We post-train Qwen2.5-VL 3B Instruct on TWIN and
+                            compare performance on FGVQA to assess if training on TWIN improves fine-grained perception
+                            across domains. Our direct comparisons show substantial gains from training on TWIN.
+                            We observe large gains on the in-domain ILIAS (+18.3%) and TWIN-Eval (+17.2%). Importantly,
+                            we find that improvements transfer to unseen domains. Substantial gains are observed on
+                            animal and plant species (INQUIRE & CUB), and for art and landmarks (MET & LANDMARKS), which
+                            are distinct from the objects in TWIN. We include comparisons with a smaller InternVL3.5 1B
+                            model in the paper.</p>
+
+                            <p><strong>Importance of data scale.</strong> We conduct a scaling analysis to
+                            highlight the importance of collecting TWIN at scale. We train a Qwen2.5-VL 3B Instruct
+                            model on
+                            varying number of pairs from TWIN. Performance improves consistently across all datasets
+                            from
+                            $5$K to $561$K samples, reinforcing our decision to collect TWIN at scale. Notably, scale
+                            also
+                            improves performance on CUB and Inquire, which feature domains not represented in TWIN. </p>
+                        </div>
+
+                        <h3>Conclusion</h3>
+                        <p>
+                            We introduce TWIN, a large-scale VQA dataset of $561{,}000$ queries designed for improving 
+                            fine-grained perception in VLMs. To measure progress on fine-grained understanding, we 
+                            additionally introduce FGVQA, a benchmark suite for precise visual understanding across 
+                            a wide range of domains. Current open-source VLMs struggle on FGVQA, but post-training 
+                            them on TWIN substantially improves fine-grained reasoning, even on unseen domains. We envision 
+                            TWIN as a drop-in addition to VLM training corpora and hope FGVQA serves as a benchmark suite 
+                            for measuring progress in fine-grained VQA.
+                        </p>
+
+                        <strong>Acknowledgements</strong>
+                        <p>
+                            We thank Aadarsh Sahoo, Ilona Demler, and Ziqi Ma for their feedback on the
+                            project. The project is funded by Meta through the LLM evaluation research grant and
+                            partly
+                            through Caltech’s CAST program. We also thank Google’s Gemma Academic program
+                            for granting us API credits for their LLMs.
+                        </p>
+
+                        <strong>References</strong>
+                        <ol>
+                            <li id="amazon_reviews">
+                                Yupeng Hou, Jiacheng Li, Zhankui He, An Yan, Xiusi Chen, and Julian McAuley.
+                                <em>Bridging language and items for retrieval and recommendation.</em>
+                                <em>arXiv preprint</em>, 2024.
+                            </li>
+                            <li id="ilias">
+                                Giorgos Kordopatis-Zilos, Vladan Stojnic ́, Anna Manko, Pavel Suma, Nikolaos-Antonios
+                                Ypsilantis, Nikos Efthymi- adis, Zakaria Laskar, Jiri Matas, Ondrej Chum, and Giorgos
+                                Tolias.
+                                <em>Ilias: Instance-level image retrieval at scale</em>. in <em>CVPR</em>, 2025.
+                            </li>
+                            <li id="landmarks">
+                                Tobias Weyand, Andre Araujo, Bingyi Cao, and Jack Sim
+                                <em>Google landmarks dataset v2-a large-scale benchmark for instance-level recognition
+                                    and retrieval.</em>. in <em>CVPR</em>, 2020.
+                            </li>
+                            <li id="met">
+                                Nikolaos-Antonios Ypsilantis, Noa Garcia, Guangxing Han, Sarah Ibrahimi, Nanne van
+                                Noord, and Giorgos Tolias.
+                                <em>The met dataset: Instance-level recognition for artworks.</em>. in <em>NeurIPS</em>,
+                                2021.
+                            </li>
+
+                            <li id="cub">
+                                Catherine Wah, Steve Branson, Peter Welinder, Pietro Per- ona, and Serge Belongie
+                                <em>The caltech-ucsd birds-200-2011 dataset.</em>,
+                                2011.
+                            </li>
+
+                            <li id="inquire">
+                                Edward Vendrow, Omiros Pantazis, Alexander Shepard, Gabriel Brostow, Kate E Jones, Oisin
+                                Mac Aodha, Sara Beery, and Grant Van Horn
+                                <em>Inquire: a natural world text- to-image retrieval benchmark.</em>. in
+                                <em>NeurIPS</em>,
+                                2024.
+                            </li>
+
+                            <li id="inat">
+                                Grant Van Horn, Oisin Mac Aodha, Yang Song, Yin Cui, Chen Sun, Alex Shepard, Hartwig
+                                Adam, Pietro Perona, and Serge Belongie.
+                                <em>The inaturalist species classification and detection dataset</em>. in
+                                <em>CVPR</em>,
+                                2018.
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre>
+<code>TODO.</code></pre>
+        </div>
+    </section>
+
+    <div id="modal" class="modal">
+        <div class="modal-background"></div>
+
+        <div class="modal-content">
+            <div id='plot-loading-div' class="box">
+                Loading...
+            </div>
+            <div id='plot-div'></div>
+        </div>
+
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+</body>
+
+</html>
