@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     <link rel="stylesheet" href="./static/css/index.css">
-    <link rel="icon" href="./static/images/valor_logo_full.png">
+    <link rel="icon" href="./static/images/twin_logo.png">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
@@ -36,8 +36,69 @@
             }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const track = document.querySelector('.vc-track');
+            if (!track) return; // in case you remove the carousel
+
+            const slides = Array.from(track.querySelectorAll('.vc-slide'));
+            const prevBtn = document.querySelector('.vc-arrow-left');
+            const nextBtn = document.querySelector('.vc-arrow-right');
+            const descEl = document.getElementById('vc-description');
+            let current = 0;
+
+            if (!slides.length || !prevBtn || !nextBtn) return;
+
+            function setActiveSlide(index) {
+                // Remove active class from all slides, pause/reset any videos if present
+                slides.forEach((slide) => {
+                    slide.classList.remove('is-active');
+                    const v = slide.querySelector('video');
+                    if (v) {
+                        v.pause();
+                        v.currentTime = 0;
+                    }
+                });
+
+                // Wrap index
+                current = (index + slides.length) % slides.length;
+                const activeSlide = slides[current];
+                activeSlide.classList.add('is-active');
+
+                // Center the active slide in the track
+                const offset =
+                    activeSlide.offsetLeft -
+                    (track.clientWidth - activeSlide.clientWidth) / 2;
+                track.scrollTo({ left: offset, behavior: 'smooth' });
+
+                // If the slide has a video, auto-play it (optional)
+                const activeVideo = activeSlide.querySelector('video');
+                if (activeVideo) {
+                    activeVideo.muted = true;
+                    activeVideo.loop = true;
+                    activeVideo.playsInline = true;
+                    activeVideo.removeAttribute('controls');
+
+                    activeVideo.play().catch(() => {
+                        // autoplay might be blocked; nothing to do, user can click
+                    });
+                }
+
+                // Update description text
+                if (descEl) {
+                    descEl.innerHTML = activeSlide.dataset.description || '';
+                }
+            }
+
+            prevBtn.addEventListener('click', () => setActiveSlide(current - 1));
+            nextBtn.addEventListener('click', () => setActiveSlide(current + 1));
+
+            // Initialize
+            setActiveSlide(0);
+        });
+        </script>
+
 </head>
 
 <body>
@@ -92,7 +153,7 @@
                                 </span>
                                 <!-- TWIN Link. -->
                                 <span class="link-block">
-                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                    <a href="https://huggingface.co/datasets/glab-caltech/TWIN" class="external-link button is-normal is-rounded is-dark">
                                         <span class="icon">
                                             <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
                                                 alt="Hugging Face logo" style="height: 1em;">
@@ -102,7 +163,7 @@
                                 </span>
                                 <!-- FGVQA Link. -->
                                 <span class="link-block">
-                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                    <a href="https://huggingface.co/datasets/glab-caltech/FGVQA" class="external-link button is-normal is-rounded is-dark">
                                         <span class="icon">
                                             <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
                                                 alt="Hugging Face logo" style="height: 1em;">
@@ -122,7 +183,7 @@
                                 </span>
                                 <!-- Code Link. -->
                                 <span class="link-block">
-                                    <a href="https://github.com/damianomarsili/VALOR"
+                                    <a href="https://github.com/damianomarsili/TWIN"
                                         class="external-link button is-normal is-rounded is-dark">
                                         <span class="icon">
                                             <i class="fab fa-github"></i>
@@ -144,7 +205,10 @@
             <div class="columns is-centered has-text-centered">
                 <div class="content has-text-centered">
                     <p>
-                        <b>tl;dr:</b> We introduce TWIN, ..
+                        <b>tl;dr:</b> We introduce <strong>TWIN</strong>, a large-scale dataset of 561K image-pair queries that trains VLMs 
+                        to detect subtle visual differences by deciding whether two similar images show the same object. 
+                        Post-training VLMs on TWIN significantly boosts fine-grained perception across diverse domains, evaluated 
+                        with our new <strong>FGVQA</strong> benchmark suite.
                     </p>
                 </div>
             </div>
@@ -159,33 +223,41 @@
             <div class="columns is-centered has-text-centered">
                 <div class="column ">
                     <div class="content has-text-justified">
-                        <h3>Same or Not?</h3>
-                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
-                            <img src="./static/images/4o_vs_gpt5_combined.png" alt="Example from TWIN">
-                            <!-- optional caption -->
-                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure 1: TODO.
-                            </figcaption>
-                        </figure>
+                       <h3>Same or Not?</h3>
+                        <div style="overflow: auto;">
+                            <figure
+                                style="
+                                float: left;
+                                max-width: 45%;              /* width of the example */
+                                margin: 0 2rem 1.5rem 0;     /* top/right/bottom/left spacing */
+                                "
+                            >
+                                <img src="./static/images/base_example.png"
+                                    alt="TWIN example"
+                                    style="width: 100%; height: auto;">
+                                <figcaption class="has-text-centered is-size-7" style="margin-top: 0rem;">
+                                    Figure 1: Example from the TWIN dataset.
+                                </figcaption>
+                            </figure>
 
-                        <p>
-                            Consider these two images (...)
-                        </p>
+                            <p>Consider the two vacuum cleaners shown here. We ask a simple question: <em>do these 
+                                two images show the exact same vacuum cleaner?</em> At a glance, they share the same 
+                                brand and similar colors, but they are clearly not the same physical object. A 
+                                human quickly notices differences in dustbin geometry, handle design, and color 
+                                accents—subtle cues that distinguish one instance from another. Yet when asked 
+                                this question, Qwen2.5-VL, a strong open-source VLM, answers yes. The model not 
+                                only reaches the wrong conclusion but also reveals flawed visual reasoning. In 
+                                this work, we aim to address such shortcomings in fine-grained visual understanding 
+                                by introducing <strong>TWIN</strong>, a large-scale training dataset for fine-grained VQA,
+                                and <strong>FGVQA</strong>, an accompanying benchmark suite to measure progress.</p>
+                        </div>
 
                         <h3>Why do Open-Source VLMs Struggle?</h3>
 
                         <p>
-                            We first ask (...)
+                            We first ask the question: <em>why do open-source VLMs struggle at fine-grained visual 
+                            understanding?</em>
                         </p>
-                        <figure class="image is-fullwidth" style="margin: 1rem 0;">
-                            <img src="./static/images/valor.png" alt="Perception LM Datamix"
-                                style="max-width: 800px; width: 100%; height: auto;">
-                            <!-- optional caption -->
-                            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure 3: PLM datamix, outline some of the datasets & show some vqa queries on side.
-                            </figcaption>
-                        </figure>
-
                         <p>Where are the datasets that test fine-grained visual understanding?</p>
 
                         <figure class="image is-fullwidth" style="margin: 1rem 0;">
@@ -193,12 +265,12 @@
                                 style="max-width: 800px; width: 100%; height: auto;">
                             <!-- optional caption -->
                             <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure 3: PLM datamix but highlight Birds-to-words & SpotTheDiff with examples on the
+                                Figure 2: PLM datamix but highlight Birds-to-words & SpotTheDiff with examples on the
                                 side.
                             </figcaption>
                         </figure>
 
-                        <p> (...) <strong>We need more large-scale training datasets that emphasize fine-grained image
+                        <p><strong>We need more large-scale training datasets that emphasize fine-grained image
                                 understadning in VLMs!</strong></p>
 
                         <h3>The TWIN Dataset</h3>
@@ -216,7 +288,7 @@
                                 style="max-width: 800px; width: 100%; height: auto;">
                             <!-- optional caption -->
                             <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure TODO: TWIN is a large-scale VQA dataset for fine-grained visual understanding,
+                                Figure 3: TWIN is a large-scale VQA dataset for fine-grained visual understanding,
                                 where VLMs determine whether two images depict the same instance. TWIN contains $561$K
                                 pairwise VQA queries across $1{,}836$ object instances, spanning $36$ categories of
                                 common objects and over $22$K images.
@@ -256,7 +328,7 @@
                                 style="max-width: 800px; width: 100%; height: auto;">
                             <!-- optional caption -->
                             <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure TODO: We post-train VLMs using reinforncement learning on TWIN.
+                                Figure 4: We post-train VLMs using reinforncement learning on TWIN.
                                 Reward is computed by comparing the predicted answer with the ground truth pair
                                 assignment.
                             </figcaption>
@@ -271,14 +343,17 @@
 
                         <h3>The FGVQA Benchmark Suite</h3>
                         <p>
-                            (...)
+                            Fine-grained understanding is a general skill: models attuned to subtle differences should
+                            generalize across domains. To evaluate this, we introduce FGVQA, a suite of fine-grained VQA 
+                            benchmarks. FGVQA repurpose recognition and retrieval datasets, totaling $12{,}000$ queries 
+                            spanning retail products; animals and plants; landmarks; birds; and art.
                         </p>
                         <figure class="image is-fullwidth" style="margin: 1rem 0;">
                             <img src="./static/images/fgvqa.png" alt="FGVQA Benchmark Suite"
                                 style="max-width: 1000px; width: 100%; height: auto;">
                             <!-- optional caption -->
                             <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure TODO: FGVQA is a suite of fine-grained VQA benchmarks spanning retail products;
+                                Figure 5: FGVQA is a suite of fine-grained VQA benchmarks spanning retail products;
                                 animals and plants; landmarks; birds;
                                 and art. We include two query types: <em>pair</em> (top row), where a VLM judges if
                                 two images depict the same instance, species, or landmark, and <em>multi</em> where it
@@ -288,9 +363,7 @@
                         </figure>
 
                         <p>
-                            Fine-grained understanding is a general skill: models attuned to subtle differences should
-                            generalize across domains. To evaluate this, we repurpose recognition and retrieval
-                            datasets, totaling $12{,}000$ queries spanning diverse domains:
+                            FGVQA is composed of:
                         </p>
 
                         <ul>
@@ -345,7 +418,51 @@
                             ($250$ each from $0$-$3$).</p>
 
                         <h3>Training on TWIN improves fine-grained understanding.</h3>
-                        <p> TODO: carousel of examples.</p>
+                        <p>We compare the outputs of base vs. TWIN post-trained models on the FGVQA benchmark suite below.</p>
+
+                        <div class="video-carousel-wrapper">
+                            <div class="video-carousel">
+                                <button class="vc-arrow vc-arrow-left" aria-label="Previous example">&#10094;</button>
+                                <div class="vc-track">
+                                    <div class="vc-slide is-active"
+                                        data-description="<strong>Sample from TWIN-Eval.</strong> The TWIN post-trained Qwen2.5-VL 
+                                        model distinguishes subtle color differences in the numbers and clock hands that the base
+                                        model omits.">
+                                        <img src="./static/images/comparisons/a.png" alt="Comparison on TWIN-Eval" />
+                                    </div>
+                                    <div class="vc-slide"
+                                        data-description="<strong>Sample from Inquire.</strong> The TWIN post-trained model identifies 
+                                        the bird by attending to distnictive features: its black head, white body, and orange beak.">
+                                        <img src="./static/images/comparisons/b.png" alt="Comparison on Inquire" />
+                                    </div>
+                                    <div class="vc-slide"
+                                        data-description="<strong>Sample from Google Landmarks.</strong> The TWIN post-trained model 
+                                        correctly identifies the shared classical columns present in both images.">
+                                        <img src="./static/images/comparisons/c.png" alt="Comparison on Google Landmarks" />
+                                    </div>
+                                    <div class="vc-slide"
+                                        data-description="<strong>Sample from MET.</strong> The TWIN post-trained model notes the 
+                                        differences in sample dates and color schemes.">
+                                        <img src="./static/images/comparisons/d.png" alt="Comparison on MET" />
+                                    </div>
+                                    <div class="vc-slide"
+                                        data-description="<strong>Sample from ILIAS.</strong> The TWIN post-trained model correctly 
+                                        matches the reference pokemon card, even under the challenging lighting conditions of Image 2.">
+                                        <img src="./static/images/comparisons/e.png" alt="Comparison on ILIAS" />
+                                    </div>
+                                    <div class="vc-slide"
+                                        data-description="<strong>Sample from CUB.</strong> The TWIN post-trained model correctly 
+                                        detects color differences between the reference bird and the bird in Image 3.">
+                                        <img src="./static/images/comparisons/f.png" alt="Comparison on CUB" />
+                                    </div>
+                                </div>
+
+                                <button class="vc-arrow vc-arrow-right" aria-label="Next example">&#10095;</button>
+                            </div>
+                            <!-- description text under the carousel -->
+                            <p id="vc-description" class="has-text-centered is-size-6" style="margin-top: 0.75rem;">
+                            </p>
+                        </div>
 
                         <div class="wrap-block">
                             <figure class="twin-fig">
@@ -417,7 +534,7 @@
                             </li>
 
                             <li id="cub">
-                                Catherine Wah, Steve Branson, Peter Welinder, Pietro Per- ona, and Serge Belongie
+                                Catherine Wah, Steve Branson, Peter Welinder, Pietro Perona, and Serge Belongie
                                 <em>The caltech-ucsd birds-200-2011 dataset.</em>,
                                 2011.
                             </li>
