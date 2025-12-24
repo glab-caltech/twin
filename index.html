@@ -252,33 +252,40 @@
                                 and <strong>FGVQA</strong>, an accompanying benchmark suite to measure progress.</p>
                         </div>
 
-                        <h3>Why do Open-Source VLMs Struggle?</h3>
+                        <h3>Why do Open-source VLMs Struggle?</h3>
 
                         <p>
-                            We first ask the question: <em>why do open-source VLMs struggle at fine-grained visual 
-                            understanding?</em>
+                            We attribute the limitations of current open-source VLMs in fine-grained perception partly to 
+                            their training data. Most large-scale image–text corpora emphasize general visual reasoning – 
+                            such as spatial relations, common knowledge, grounding, or mathematical reasoning – over 
+                            detailed visual discrimination. While these datasets enable broad understanding, they provide 
+                            little incentive to attend to subtle, instance-level differences. For a concrete example, the 
+                            recent open-source VLM PerceptionLM <a href="#plm">[1]</a> details their exact training data 
+                            (shown below): 
                         </p>
-                        <p>Where are the datasets that test fine-grained visual understanding?</p>
 
                         <figure class="image is-fullwidth" style="margin: 1rem 0;">
-                            <img src="./static/images/valor.png" alt="PerceptionLM omits fine-grained understanding."
+                            <img src="./static/images/perception_lm.png" alt="PerceptionLM omits fine-grained understanding."
                                 style="max-width: 800px; width: 100%; height: auto;">
                             <!-- optional caption -->
                             <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure 2: PLM datamix but highlight Birds-to-words & SpotTheDiff with examples on the
-                                side.
+                                Figure 2: Training datasets used by PerceptionLM. Only two datasets emphasize fine-grained 
+                                image understanding.
                             </figcaption>
                         </figure>
 
-                        <p><strong>We need more large-scale training datasets that emphasize fine-grained image
-                                understadning in VLMs!</strong></p>
+                        <p>Among all these datasets that span tens of millions of data points, only <strong>two</strong> emphasize 
+                        fine-grained understanding: SpotTheDiff <a href="#spotthediff">[2]</a> and Birds-To-Words <a href="#btw">[3]</a>. 
+                        These datasets combine for less than $35$K samples and we find them to be considerably easier than our new dataset 
+                        TWIN. <strong>To improve fine-grained perception in VLMs, we need more large-scale training datasets that emphasize 
+                        fine-grained image understanding!</strong></p>
 
                         <h3>The TWIN Dataset</h3>
 
                         <p>
                             We present TWIN, a large-scale VQA dataset for advancing fine-grained visual understanding
                             in VLMs. TWIN introduces $561{,}000$ instance-centric queries
-                            where models are tasked to judge whether two similar looking images depict the same object
+                            where models are tasked to judge whether two similar-looking images depict the same object
                             instance. This design rewards attention to nuanced, instance-level details such as shape,
                             texture, and part geometry, going beyond category-level understanding.
                         </p>
@@ -297,7 +304,7 @@
 
                         <p></p><strong>Sourcing Instances.</strong> We define an instance as a set of images of the same
                         physical object under varied viewpoints, lighting, and backgrounds. We source object instances
-                        across diverse categories from Amazon Reviews <a href="#amazon_reviews">[1]</a>. From this
+                        across diverse categories from Amazon Reviews <a href="#amazon_reviews">[4]</a>. From this
                         definition, we design a VQA task where a VLM receives two images and determines if they depict
                         the same instance.</p>
 
@@ -310,8 +317,8 @@
 
                         <p></p><strong>Statistics and Scalability.</strong> TWIN features $561$K pairwise VQA queries,
                         including
-                        $22{,}157$ unique images of $1{,}836$ object instances. Our instances span a wide range of
-                        categories of household objects. Importantly, our pairwise formulation enables TWIN to scale
+                        $22{,}157$ unique images of $1{,}836$ object instances. Our instances span a wide range of household 
+                        objects categories. Importantly, our pairwise formulation enables TWIN to scale
                         favorably with the number of object instances.
                         </p>
                         
@@ -320,15 +327,15 @@
                             To improve fine-grained understanding in VLMs and evaluate the impact of our new dataset,
                             we post-train existing models on TWIN. Our task requires recognizing subtle attributes to
                             distinguish similar instances, and we hypothesize that optimizing for this task enhances
-                            broader fine-grained abilities. We post-train with reinforcement learning as it is shown to
-                            improve model capabilities while preserving prior skills.
+                            broader fine-grained abilities. We post-train with reinforcement learning as it has been shown 
+                            to improve model capabilities while preserving prior skills.
                         </p>
                         <figure class="image is-fullwidth" style="margin: 1rem 0;">
                             <img src="./static/images/training.png" alt="Post-Training VLMs on TWIN"
                                 style="max-width: 800px; width: 100%; height: auto;">
                             <!-- optional caption -->
                             <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem;">
-                                Figure 4: We post-train VLMs using reinforncement learning on TWIN.
+                                Figure 4: We post-train VLMs using reinforcement learning on TWIN.
                                 Reward is computed by comparing the predicted answer with the ground truth pair
                                 assignment.
                             </figcaption>
@@ -345,7 +352,7 @@
                         <p>
                             Fine-grained understanding is a general skill: models attuned to subtle differences should
                             generalize across domains. To evaluate this, we introduce FGVQA, a suite of fine-grained VQA 
-                            benchmarks. FGVQA repurpose recognition and retrieval datasets, totaling $12{,}000$ queries 
+                            benchmarks. FGVQA repurposes recognition and retrieval datasets, totaling $12{,}000$ queries 
                             spanning retail products; animals and plants; landmarks; birds; and art.
                         </p>
                         <figure class="image is-fullwidth" style="margin: 1rem 0;">
@@ -368,33 +375,33 @@
 
                         <ul>
                             <li>
-                                <strong>TWIN-Eval</strong> is the the evaluation set of TWIN. It is collected
+                                <strong>TWIN-Eval</strong> is the evaluation set of TWIN. It is collected
                                 identically to TWIN, but features distinct instances and images.
                             </li>
                             <li>
-                                <strong>ILIAS <a href="#ilias">[2]</a></strong> is a large-scale test dataset of
+                                <strong>ILIAS <a href="#ilias">[5]</a></strong> is a large-scale test dataset of
                                 instance-level image retrieval. It predominantly features images of retail products
                                 taken in various contexts, backgrounds, and lighting.
                             </li>
                             <li>
-                                <strong>Google Landmarks v2 <a href="#landmarks">[3]</a></strong> is a landmark
+                                <strong>Google Landmarks v2 <a href="#landmarks">[6]</a></strong> is a landmark
                                 recognition dataset featuring human-made and natural landmarks. The dataset has been
                                 used in both classification and retrieval settings.
                             </li>
                             <li>
-                                <strong>MET <a href="#met">[4]</a></strong> is an image retrieval dataset featuring
+                                <strong>MET <a href="#met">[7]</a></strong> is an image retrieval dataset featuring
                                 artwork from the Metropolitan Museum of Art in New York. The dataset features images of
                                 the same art piece or sculpture from varying viewpoints, emphasizing multi-view
                                 consistency in retrieval.
                             </li>
                             <li>
-                                <strong>CUB <a href="#cub">[5]</a></strong> is a fine-grained classification dataset
+                                <strong>CUB <a href="#cub">[8]</a></strong> is a fine-grained classification dataset
                                 that focuses on identifying bird species from images
                             </li>
                             <li>
-                                <strong>Inquire <a href="#inquire">[6]</a></strong> is a benchmark for natural world
+                                <strong>Inquire <a href="#inquire">[9]</a></strong> is a benchmark for natural world
                                 image retrieval, featuring images of animal and plant species sourced from the
-                                iNaturalist <a href="#inat">[7]</a> dataset.
+                                iNaturalist <a href="#inat">[10]</a> dataset.
 
                             </li>
                         </ul>
@@ -432,7 +439,7 @@
                                     </div>
                                     <div class="vc-slide"
                                         data-description="<strong>Sample from Inquire.</strong> The TWIN post-trained model identifies 
-                                        the bird by attending to distnictive features: its black head, white body, and orange beak.">
+                                        the bird by attending to distinctive features: its black head, white body, and orange beak.">
                                         <img src="./static/images/comparisons/b.png" alt="Comparison on Inquire" />
                                     </div>
                                     <div class="vc-slide"
@@ -447,7 +454,7 @@
                                     </div>
                                     <div class="vc-slide"
                                         data-description="<strong>Sample from ILIAS.</strong> The TWIN post-trained model correctly 
-                                        matches the reference pokemon card, even under the challenging lighting conditions of Image 2.">
+                                        matches the reference Pokémon card, even under the challenging lighting conditions of Image 2.">
                                         <img src="./static/images/comparisons/e.png" alt="Comparison on ILIAS" />
                                     </div>
                                     <div class="vc-slide"
@@ -476,7 +483,8 @@
                             we find that improvements transfer to unseen domains. Substantial gains are observed on
                             animal and plant species (INQUIRE & CUB), and for art and landmarks (MET & LANDMARKS), which
                             are distinct from the objects in TWIN. We include comparisons with a smaller InternVL3.5 1B
-                            model in the paper.</p>
+                            model in the paper. Importantly, improved performance on FGVQA does not compromise performance
+                            on general VQA benchmarks, which we report in the paper.</p>
 
                             <p><strong>Importance of data scale.</strong> We conduct a scaling analysis to
                             highlight the importance of collecting TWIN at scale. We train a Qwen2.5-VL 3B Instruct
@@ -510,20 +518,36 @@
 
                         <strong>References</strong>
                         <ol>
+                            <li id="plm">
+                                Jang Hyun Cho, Andrea Madotto, Effrosyni Mavroudi, Triantafyllos Afouras, 
+                                Tushar Nagarajan, Muhammad Maaz, Yale Song, Tengyu Ma, Shuming Hu, Suyog Jain, et al. 
+                                <em>Perceptionlm: Open-access data and models for detailed visual understanding.</em>
+                                <em>arXiv preprint</em>, 2025.
+                            </li>
+                            <li id="spotthediff">
+                                Harsh Jhamtani and Taylor Berg-Kirkpatrick. 
+                                <em>Learning to describe differences between pairs of similar images.</em>
+                                <em>EMNLP</em>, 2018.
+                            </li>
+                            <li id="btw">
+                                Maxwell Forbes, Christine Kaeser-Chen, Piyush Sharma, and Serge Belongie.
+                                <em>Neural naturalist: Generating fine-grained image comparisons</em>
+                                <em>EMNLP</em>, 2019.
+                            </li>
                             <li id="amazon_reviews">
                                 Yupeng Hou, Jiacheng Li, Zhankui He, An Yan, Xiusi Chen, and Julian McAuley.
                                 <em>Bridging language and items for retrieval and recommendation.</em>
                                 <em>arXiv preprint</em>, 2024.
                             </li>
                             <li id="ilias">
-                                Giorgos Kordopatis-Zilos, Vladan Stojnic ́, Anna Manko, Pavel Suma, Nikolaos-Antonios
-                                Ypsilantis, Nikos Efthymi- adis, Zakaria Laskar, Jiri Matas, Ondrej Chum, and Giorgos
+                                Giorgos Kordopatis-Zilos, Vladan Stojnić, Anna Manko, Pavel Suma, Nikolaos-Antonios
+                                Ypsilantis, Nikos Efthymiadis, Zakaria Laskar, Jiri Matas, Ondrej Chum, and Giorgos
                                 Tolias.
                                 <em>Ilias: Instance-level image retrieval at scale</em>. in <em>CVPR</em>, 2025.
                             </li>
                             <li id="landmarks">
                                 Tobias Weyand, Andre Araujo, Bingyi Cao, and Jack Sim
-                                <em>Google landmarks dataset v2-a large-scale benchmark for instance-level recognition
+                                <em>Google Landmarks Dataset v2 - a large-scale benchmark for instance-level recognition
                                     and retrieval.</em>. in <em>CVPR</em>, 2020.
                             </li>
                             <li id="met">
@@ -542,7 +566,7 @@
                             <li id="inquire">
                                 Edward Vendrow, Omiros Pantazis, Alexander Shepard, Gabriel Brostow, Kate E Jones, Oisin
                                 Mac Aodha, Sara Beery, and Grant Van Horn
-                                <em>Inquire: a natural world text- to-image retrieval benchmark.</em>. in
+                                <em>Inquire: a natural world text-to-image retrieval benchmark.</em>. in
                                 <em>NeurIPS</em>,
                                 2024.
                             </li>
